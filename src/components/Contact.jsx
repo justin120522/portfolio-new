@@ -8,6 +8,8 @@ const Contact = () => {
     email: '',
     message: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,10 +17,16 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message!');
-    setFormData({ name: '', email: '', message: '' });
+    setIsSubmitting(true);
+    
+    setTimeout(() => {
+      console.log('Form submitted:', formData);
+      setSubmitSuccess(true);
+      setFormData({ name: '', email: '', message: '' });
+      setIsSubmitting(false);
+      
+      setTimeout(() => setSubmitSuccess(false), 3000);
+    }, 600);
   };
 
   return (
@@ -89,11 +97,40 @@ const Contact = () => {
             <motion.button
               type="submit"
               className="btn btn-primary"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              disabled={isSubmitting}
+              whileHover={{ scale: 1.05, y: -3 }}
+              whileTap={{ scale: 0.95, y: 0 }}
             >
-              Send Message
+              {isSubmitting ? (
+                <motion.span
+                  animate={{ opacity: [1, 0.5, 1] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                >
+                  Sending...
+                </motion.span>
+              ) : submitSuccess ? (
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  ✓ Sent Successfully!
+                </motion.span>
+              ) : (
+                'Send Message'
+              )}
             </motion.button>
+            {submitSuccess && (
+              <motion.div
+                className="success-message"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+              >
+                Thank you for your message! I'll get back to you soon.
+              </motion.div>
+            )}
           </motion.form>
         </div>
       </div>

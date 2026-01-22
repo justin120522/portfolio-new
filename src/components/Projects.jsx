@@ -45,7 +45,7 @@ const Projects = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
               viewport={{ once: true }}
-              whileHover={{ y: -10 }}
+              whileHover={{ y: -15 }}
             >
               <div className="project-image">
                 <img src={project.image} alt={project.title} />
