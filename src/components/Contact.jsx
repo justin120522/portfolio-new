@@ -23,7 +23,8 @@ const Contact = () => {
     const formData = new FormData(e.target);
     
     // Send to Formspree
-    fetch(`https://formspree.io/f/${import.meta.env.VITE_FORMSPREE_ID}`, {
+    const formspreeId = import.meta.env.VITE_FORMSPREE_ID || 'mzdgdbab';
+    fetch(`https://formspree.io/f/${formspreeId}`, {
       method: 'POST',
       body: formData,
       headers: {
