@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import emailjs from '@emailjs/browser';
 import './Contact.css';
+
+// Initialize EmailJS with your public key
+emailjs.init('YOUR_PUBLIC_KEY_HERE');
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -19,14 +23,30 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    setTimeout(() => {
-      console.log('Form submitted:', formData);
+    const templateParams = {
+      to_email: 'justin.tejano@urios.edu.ph',
+      from_name: formData.name,
+      from_email: formData.email,
+      message: formData.message,
+    };
+
+    emailjs.send(
+      'YOUR_SERVICE_ID_HERE',
+      'YOUR_TEMPLATE_ID_HERE',
+      templateParams
+    )
+    .then((response) => {
+      console.log('Email sent successfully:', response);
       setSubmitSuccess(true);
       setFormData({ name: '', email: '', message: '' });
       setIsSubmitting(false);
-      
       setTimeout(() => setSubmitSuccess(false), 3000);
-    }, 600);
+    })
+    .catch((error) => {
+      console.error('Failed to send email:', error);
+      alert('Failed to send message. Please try again.');
+      setIsSubmitting(false);
+    });
   };
 
   return (
@@ -52,9 +72,9 @@ const Contact = () => {
             <h3>Let's work together!</h3>
             <p>I'm always open to discussing new opportunities and interesting projects.</p>
             <div className="contact-details">
-              <p><i className="fas fa-envelope"></i> john.doe@example.com</p>
-              <p><i className="fas fa-phone"></i> +1 (555) 123-4567</p>
-              <p><i className="fas fa-map-marker-alt"></i> New York, NY</p>
+              <p><i className="fas fa-envelope"></i> justin.tejano@urios.edu.ph</p>
+              <p><i className="fas fa-phone"></i> 09999999999</p>
+              <p><i className="fas fa-map-marker-alt"></i> Km3 Baan Butuan City</p>
             </div>
           </motion.div>
           <motion.form
