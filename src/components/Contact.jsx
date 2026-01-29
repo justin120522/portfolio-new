@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import emailjs from '@emailjs/browser';
 import './Contact.css';
-
-// Initialize EmailJS with your public key
-// emailjs.init('YOUR_PUBLIC_KEY_HERE');
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -23,18 +19,33 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // TODO: Add your EmailJS credentials (Public Key, Service ID, Template ID)
-    // Then uncomment emailjs.init() at the top and enable email sending below
+    // Create FormData for Formspree
+    const formData = new FormData(e.target);
     
-    // For now, just show success message and log form data
-    console.log('Form submitted:', formData);
-    
-    setTimeout(() => {
-      setSubmitSuccess(true);
-      setFormData({ name: '', email: '', message: '' });
+    // Send to Formspree
+    fetch(`https://formspree.io/f/${import.meta.env.VITE_FORMSPREE_ID}`, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .then((response) => {
+      if (response.ok) {
+        setSubmitSuccess(true);
+        setFormData({ name: '', email: '', message: '' });
+        e.target.reset();
+        setTimeout(() => setSubmitSuccess(false), 3000);
+      } else {
+        alert('Failed to send message. Please try again.');
+      }
       setIsSubmitting(false);
-      setTimeout(() => setSubmitSuccess(false), 3000);
-    }, 600);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert('Failed to send message. Please try again.');
+      setIsSubmitting(false);
+    });
   };
 
   return (
