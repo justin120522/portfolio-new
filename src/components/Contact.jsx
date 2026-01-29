@@ -4,7 +4,7 @@ import emailjs from '@emailjs/browser';
 import './Contact.css';
 
 // Initialize EmailJS with your public key
-emailjs.init('YOUR_PUBLIC_KEY_HERE');
+// emailjs.init('YOUR_PUBLIC_KEY_HERE');
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -23,30 +23,18 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    const templateParams = {
-      to_email: 'justin.tejano@urios.edu.ph',
-      from_name: formData.name,
-      from_email: formData.email,
-      message: formData.message,
-    };
-
-    emailjs.send(
-      'YOUR_SERVICE_ID_HERE',
-      'YOUR_TEMPLATE_ID_HERE',
-      templateParams
-    )
-    .then((response) => {
-      console.log('Email sent successfully:', response);
+    // TODO: Add your EmailJS credentials (Public Key, Service ID, Template ID)
+    // Then uncomment emailjs.init() at the top and enable email sending below
+    
+    // For now, just show success message and log form data
+    console.log('Form submitted:', formData);
+    
+    setTimeout(() => {
       setSubmitSuccess(true);
       setFormData({ name: '', email: '', message: '' });
       setIsSubmitting(false);
       setTimeout(() => setSubmitSuccess(false), 3000);
-    })
-    .catch((error) => {
-      console.error('Failed to send email:', error);
-      alert('Failed to send message. Please try again.');
-      setIsSubmitting(false);
-    });
+    }, 600);
   };
 
   return (
